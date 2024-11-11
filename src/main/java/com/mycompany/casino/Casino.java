@@ -89,10 +89,21 @@ public class Casino extends JFrame {
             JButton iniciarrButton = new JButton("Iniciar");
             JPanel imagePanel = new JPanel();
             imagePanel.setLayout(new GridLayout(1, 2, 10, 10));
+            Imagenes[0] = new ImageIcon(getClass().getResource("/casino/Imagenes/1.jpg"));
+            Imagenes[1] = new ImageIcon(getClass().getResource("/casino/Imagenes/2.jpg"));
+            Imagenes[2] = new ImageIcon(getClass().getResource("/casino/Imagenes/3.jpg"));
+            Imagenes[3] = new ImageIcon(getClass().getResource("/casino/Imagenes/4.jpg"));
+            Imagenes[4] = new ImageIcon(getClass().getResource("/casino/Imagenes/5.jpg"));
+            Imagenes[5] = new ImageIcon(getClass().getResource("/casino/Imagenes/6.jpg"));
+            Imagenes[6] = new ImageIcon(getClass().getResource("/casino/Imagenes/7.jpg"));
+            
+            Imagen1.setIcon(Imagenes[0]);
+            Imagen2.setIcon(Imagenes[0]);
+            Imagen3.setIcon(Imagenes[0]);
             imagePanel.add(Imagen1);
             imagePanel.add(Imagen2);
             imagePanel.add(Imagen3);
-            
+         
             add(label, BorderLayout.NORTH);
             add(imagePanel, BorderLayout.CENTER);
             
@@ -111,7 +122,24 @@ public class Casino extends JFrame {
                 ventanas(mainPanel); 
             });
         }
+        private class RuletaImagen1 implements Runnable {
+        
+            @Override
+            public void run() {
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        int randomIndex = (int) (Math.random() * Imagenes.length); // Genera un índice aleatorio para la cara
+                        Imagen1.setIcon(Imagenes[randomIndex]); // Actualiza la imagen de la cara del dado
+                        mainPanel.repaint();
+                        Thread.sleep(200); // Pausa de 200 ms
+                    }
+                } catch (InterruptedException ex) {
+                }
+            }
+        }
     }
+    
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
