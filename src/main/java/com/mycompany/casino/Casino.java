@@ -18,6 +18,7 @@ public class Casino extends JFrame {
     private JButton botondados;
     private JButton botonmonedas;
     private ImageIcon[] images = new ImageIcon[6];
+    private ImageIcon[] dados = new ImageIcon[6];
    
     public Casino() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +32,11 @@ public class Casino extends JFrame {
             Image scaledImage = originalImage.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
             images[n] = new ImageIcon(scaledImage);
         }
-
+        for (int n = 0; n < 6; n++) {
+            ImageIcon originalImage = new ImageIcon("C:\\Users\\juche\\Documents\\NetBeansProjects\\casino\\src\\main\\java\\com\\mycompany\\casino\\dados\\" + (n + 1) + ".jpg");
+            Image scaledImage = originalImage.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            dados[n] = new ImageIcon(scaledImage);
+        }
 
         mainPanel.add(botondados);
         mainPanel.add(botonmonedas);
@@ -54,30 +59,76 @@ public class Casino extends JFrame {
     }
 
     class PanelDados extends JPanel {
-      
+        private JLabel dado1;
+        private JLabel dado2;
 
         public PanelDados() {
             setLayout(new BorderLayout());
             JLabel label = new JLabel("Juego de Dados", JLabel.CENTER);
             JButton volverButton = new JButton("Volver");
             JButton iniciarButton = new JButton("Iniciar");
+            JPanel imagePanel = new JPanel(new GridLayout(1, 2, 10, 10));
+
+            dado1 = new JLabel(dados[0], JLabel.CENTER);
+            dado2 = new JLabel(dados[1], JLabel.CENTER);
+
+            imagePanel.add(dado1);
+            imagePanel.add(dado2);
             
-            
-            
+            add(label, BorderLayout.NORTH);
+            add(imagePanel, BorderLayout.CENTER);
+
             JPanel buttonPanel = new JPanel();
             buttonPanel.add(volverButton);
             buttonPanel.add(iniciarButton);
+            add(buttonPanel, BorderLayout.SOUTH);
+
+            add(label, BorderLayout.NORTH);
+            add(imagePanel, BorderLayout.CENTER);
             add(buttonPanel, BorderLayout.SOUTH);
             volverButton.addActionListener((ActionEvent e) -> {
                 ventanas(mainPanel);
             });
 
             iniciarButton.addActionListener((ActionEvent e) -> {
-
+             Thread hilo = new Thread(new cambiardados());
+             hilo.start();
+             Thread hilo2 = new Thread(new cambiardados2());
+             hilo2.start();
             });
         }
+        private class cambiardados implements Runnable {
+            @Override
+            public void run() {
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        int randomIndex = (int) (Math.random() * dados.length); // Genera un índice aleatorio para la cara
+                        dado1.setIcon(dados[randomIndex]); // Actualiza la imagen de la cara del dado
+                        mainPanel.repaint();
+                        Thread.sleep(200); // Pausa de 200 ms
+                    }
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+         private class cambiardados2 implements Runnable {
+            @Override
+            public void run() {
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        int randomIndex = (int) (Math.random() * dados.length); // Genera un índice aleatorio para la cara
+                        dado2.setIcon(dados[randomIndex]); // Actualiza la imagen de la cara del dado
+                        mainPanel.repaint();
+                        Thread.sleep(200); // Pausa de 200 ms
+                    }
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
- 
+         
 
     class PanelMonedas extends JPanel {
         private JLabel Imagen1;
@@ -168,6 +219,7 @@ public class Casino extends JFrame {
                 }
             }
         }
+         
     }
 
     public static void main(String[] args) {
